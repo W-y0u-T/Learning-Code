@@ -1,2 +1,2 @@
 # Learning-Code
-My shitty work
+Code of a Beginner
