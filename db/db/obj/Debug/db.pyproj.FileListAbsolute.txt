@@ -1,0 +1,2 @@
+J:\repos\python\MySQLDB\db\db\obj\Debug\db.pyproj.CoreCompileInputs.cache
+D:\boa\Current Year\2019\Level 3\python\MySQLDB\db\db\obj\Debug\db.pyproj.CoreCompileInputs.cache
