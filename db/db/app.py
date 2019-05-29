@@ -74,6 +74,7 @@ def update_user():
 			password = form_values.get("password")
 			dob="2001-10-01"
 			user_id = form_values.get('ID')
+
 			try:
 				with connection.cursor() as cursor:
 					# Create a new record
@@ -103,11 +104,37 @@ def update_user():
 #so you should add  new routes for edit_user, user_details and delete_user using record ids
 # create the html pages needed
 # modify database to include an image field which will store the image filename(eg pic.jpg) in database and  implement this functionality in code where applicable
-#@app.route('/delete', method =["GET","POST"])
-#def delete_record():
-#
-#	if method == "POST":
-#		form = request.form
+
+@app.route('/delete_record', methods =["GET","POST"])
+def delete_record():
+	user_ID = request.args.get("id")
+	connection=create_connection()
+	if request.method == "POST":
+		form = request.form
+		try:
+			with connection.cursor() as cursor:
+				# Create a new record
+				sql = "DELETE FROM  `users` WHERE ID = %s "
+				val=(user_ID)
+				cursor.execute(sql,(val))
+				data = cursor.fetchall()
+				data=list(data)
+			#save values in dbase
+			connection.commit()
+			cursor.close()
+		finally:
+			connection.close()
+			return redirect(url_for('hello'))
+	try:
+		with connection.cursor() as cursor:
+			#pull records and display
+			sql = "SELECT * from users where ID=%s"
+			cursor.execute(sql, user_ID)
+			data = cursor.fetchone()
+			data=data
+	finally:
+		connection.close()
+	return render_template("delete_record.html",data=data)
 
 if __name__ == '__main__':
     import os

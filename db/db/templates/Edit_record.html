@@ -26,7 +26,7 @@
         <p>All Fields are required</p>
         <form action="/edit_record" method="post" oninput='password2.setCustomValidity(password2.value != password.value ? "Passwords do not match." : "")' class="needs-validation" novalidate>
             <input type="hidden" name="ID" value="{{data["ID"]}}" />
-            <div class="form-group">
+            <div class="form-group">    ` 
                 <label for="firstname">First Name:</label>
                 <input type="text" class="form-control" id="firstname" value="{{data['FirstName']}}" name="firstname" required>
                 <div class="valid-feedback">Valid.</div>
