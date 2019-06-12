@@ -169,6 +169,74 @@ def login():
 
     return render_template('login.html', error=error)
 
+@app.route('/edit_user', methods=['POST','GET'])
+def update_user():
+	user_id = request.args.get('id')
+	connection=create_connection()
+	if request.method == 'POST':
+			form_values = request.form 
+			first_name = form_values.get("firstname")
+			family_name = form_values.get("familyname")
+			email = form_values.get("email")
+			password = form_values.get("password")
+			dob="2001-10-01"
+			user_id = form_values.get('ID')
+
+			try:
+				with connection.cursor() as cursor:
+					# Create a new record
+					sql = "UPDATE `tblusers` SET FirstName=%s,FamilyName=%s,Email=%s,DateOfBirth=%s,Password=%s WHERE ID=%s"
+					val=(first_name,family_name,email,dob,password, user_id)
+					cursor.execute(sql,(val))
+					data = cursor.fetchall()
+					data=list(data)
+					#save values in dbase
+				connection.commit()
+				cursor.close()
+			finally:
+				connection.close()
+			return redirect(url_for('hello'))
+	try:
+		with connection.cursor() as cursor:
+			#pull records and display
+			sql = "SELECT * from tblusers where ID=%s"
+			cursor.execute(sql, user_id)
+			data = cursor.fetchone()
+			data=data
+	finally:
+		connection.close()
+	return render_template("Edit_record.html",data=data)
+
+@app.route('/delete_user', methods =["GET","POST"])
+def delete_record():
+	user_ID = request.args.get("id")
+	connection=create_connection()
+	if request.method == "POST":
+		form = request.form
+		try:
+			with connection.cursor() as cursor:
+				# Create a new record
+				sql = "DELETE FROM  `tblusers` WHERE ID = %s "
+				val=(user_ID)
+				cursor.execute(sql,(val))
+				data = cursor.fetchall()
+				data=list(data)
+			#save values in dbase
+			connection.commit()
+			cursor.close()
+		finally:
+			connection.close()
+			return redirect(url_for('hello'))
+	try:
+		with connection.cursor() as cursor:
+			#pull records and display
+			sql = "SELECT * from tblusers where ID=%s"
+			cursor.execute(sql, user_ID)
+			data = cursor.fetchone()
+			data=data
+	finally:
+		connection.close()
+	return render_template("delete_record.html",data=data)
 
 @app.route('/logout')
 def logout():
