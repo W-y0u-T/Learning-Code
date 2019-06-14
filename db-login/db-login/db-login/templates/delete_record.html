@@ -58,7 +58,7 @@
         <h2>Are you Sure you want to Delete?</h2><hr />
         <!-- Split button -->
         <div class="btn-group">
-            <form action="/delete_record?id={{data['ID']}}" method="post" class="needs-validation" novalidate>
+            <form action="/delete_user?id={{data['ID']}}" method="post" class="needs-validation" novalidate>
                 <input type="hidden" name="Id" id="Id" value="{{data['ID']}}" />
                 <button type="submit" class="btn btn-danger">Delete</button> <a href="/" class="btn btn-info">Cancel</a>
             </form>

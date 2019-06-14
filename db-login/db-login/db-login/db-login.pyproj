@@ -30,8 +30,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <Content Include="templates\Add_user.html" />
+    <Content Include="templates\delete_record.html" />
+    <Content Include="templates\Edit_record.html" />
     <Content Include="templates\Index.html" />
     <Content Include="templates\Login.html" />
+    <Content Include="templates\Update.html" />
     <Content Include="templates\Users.html" />
   </ItemGroup>
   <ItemGroup>

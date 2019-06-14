@@ -3,7 +3,7 @@ This script runs the application using a development server.
 It contains the definition of routes and views for the application.
 """
 from flask import Flask, session, url_for, redirect, escape, render_template, request,abort
-import pymysql
+import pymysql, hashlib
 from hashlib import md5
 app=Flask(__name__)
 
@@ -115,6 +115,37 @@ def home():
 #		session['logged_in']=False
 		
 #	return render_template('login.html', error=error)
+# update from form
+@app.route('/add_user', methods=['POST','GET'])
+def new_user():
+   connection=create_connection()
+   if request.method == 'POST':
+         form_values = request.form 
+         first_name = form_values["firstname"]
+         family_name = form_values["familyname"]
+         email = form_values["email"]
+         password = form_values["password"]
+         password = hashlib.md5(password.encode()).hexdigest()
+         dob=form_values=['dob']
+         try:
+            with connection.cursor() as cursor:
+                # Create a new record
+                sql = "INSERT INTO `tblusers` (FirstName,FamilyName,Email,DateOfBirth,Password) VALUES (%s,%s,%s,%s,%s)"
+                val=(first_name,family_name,email,dob,password)
+                cursor.execute(sql,(val))
+                #save values in dbase
+            connection.commit()
+            cursor.close()
+            with connection.cursor() as cursor:
+                #pull records and display
+                sql = "SELECT * from users"
+                cursor.execute(sql)
+                data = cursor.fetchall()
+                data=list(data)
+         finally:
+             connection.close()
+         return redirect(url_for('hello'))
+   return render_template("add_user.html")
 
 #users
 @app.route('/users')
@@ -179,14 +210,13 @@ def update_user():
 			family_name = form_values.get("familyname")
 			email = form_values.get("email")
 			password = form_values.get("password")
-			dob="2001-10-01"
+			password = hashlib.md5(password.encode()).hexdigest()
 			user_id = form_values.get('ID')
-
 			try:
 				with connection.cursor() as cursor:
 					# Create a new record
-					sql = "UPDATE `tblusers` SET FirstName=%s,FamilyName=%s,Email=%s,DateOfBirth=%s,Password=%s WHERE ID=%s"
-					val=(first_name,family_name,email,dob,password, user_id)
+					sql = "UPDATE `tblusers` SET FirstName=%s,FamilyName=%s,Email=%s,Password=%s WHERE ID=%s"
+					val=(first_name,family_name,email,password, user_id)
 					cursor.execute(sql,(val))
 					data = cursor.fetchall()
 					data=list(data)
@@ -195,7 +225,7 @@ def update_user():
 				cursor.close()
 			finally:
 				connection.close()
-			return redirect(url_for('hello'))
+			return redirect(url_for('users'))
 	try:
 		with connection.cursor() as cursor:
 			#pull records and display
@@ -226,7 +256,7 @@ def delete_record():
 			cursor.close()
 		finally:
 			connection.close()
-			return redirect(url_for('hello'))
+			return redirect(url_for('users'))
 	try:
 		with connection.cursor() as cursor:
 			#pull records and display
