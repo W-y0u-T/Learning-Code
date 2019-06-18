@@ -116,6 +116,7 @@ def home():
 		
 #	return render_template('login.html', error=error)
 # update from form
+
 @app.route('/add_user', methods=['POST','GET'])
 def new_user():
    connection=create_connection()
@@ -130,21 +131,22 @@ def new_user():
          try:
             with connection.cursor() as cursor:
                 # Create a new record
-                sql = "INSERT INTO `tblusers` (FirstName,FamilyName,Email,DateOfBirth,Password) VALUES (%s,%s,%s,%s,%s)"
-                val=(first_name,family_name,email,dob,password)
+                sql = "INSERT INTO `tblusers` (FirstName,FamilyName,Email,Password) VALUES (%s,%s,%s,%s)"
+                val=(first_name,family_name,email,password)
                 cursor.execute(sql,(val))
+                print('working')
                 #save values in dbase
             connection.commit()
             cursor.close()
             with connection.cursor() as cursor:
                 #pull records and display
-                sql = "SELECT * from users"
+                sql = "SELECT * from tblusers"
                 cursor.execute(sql)
                 data = cursor.fetchall()
                 data=list(data)
          finally:
              connection.close()
-         return redirect(url_for('hello'))
+         return redirect(url_for('users'))
    return render_template("add_user.html")
 
 #users
