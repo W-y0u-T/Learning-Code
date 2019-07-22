@@ -1,0 +1,20 @@
+﻿{%extends 'layout.html'%}
+
+{%block content%}
+<form action="/issue" method="POST">
+
+    <select class="form-control" name="users">
+        {%for user in users%}
+        <option value="{{user.ID}}">{{user.FirstName}}</option>
+        {%endfor%}
+    </select>
+
+    <select class="form-control" name="laptops">
+        {%for laptop in laptops%}
+        <option value="{{laptop.LaptopID}}">{{laptop.LaptopID}}</option>
+        {%endfor%}
+    </select>
+    <input type="submit" />
+
+</form>
+{%endblock%}

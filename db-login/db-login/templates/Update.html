@@ -1,0 +1,26 @@
+﻿{%extends 'layout.html'%}
+
+{%block content%}
+    <div class="container">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Gender</th>
+                <th>Age</th>
+            </tr>
+            </thead><tbody>
+    {% for row in results %}
+    <tr>
+        <td>{{ row[0] }}</td>
+        <td>{{ row[1] }}</td>
+        <td>{{ row[2] }}</td>
+        <td>{{ row[3] }}</td>
+        <td>{{ row[4] }}</td>
+    </tr>
+    {% endfor %}</tbody>
+</table>
+    </div>
+{%endblock%}
